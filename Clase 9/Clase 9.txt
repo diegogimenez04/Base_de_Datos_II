@@ -1,0 +1,37 @@
+ -- 1
+ 
+select country.country, COUNT(*) as numero_ciudad
+from city inner join country using (country_id)
+group by country.country
+order by country.country, country.country_id
+
+ --2
+ 
+select country.country, count(*)
+from city inner join country using (country_id)
+group by city.country_id having COUNT(*) >10
+
+ --3
+
+SELECT c1.customer_id,
+	(SELECT COUNT(*) FROM rental WHERE rental.customer_id = c1.customer_id) AS cnt,
+	(SELECT SUM(payment.amount) FROM rental INNER JOIN payment ON rental.rental_id = payment.rental_id WHERE rental.customer_id = c1.customer_id ) AS suma
+	FROM customer c1 ORDER BY suma DESC;
+
+ --4
+
+SELECT rating, AVG(`length`)
+FROM film
+GROUP BY `length`
+HAVING AVG(`length`) > (SELECT AVG(`length`) FROM film)
+ORDER BY `length` DESC;
+
+ --5
+
+SELECT film.rating, SUM(payment.amount) AS Ammount
+FROM payment 
+INNER JOIN rental USING (rental_id)
+INNER JOIN inventory USING (inventory_id)
+INNER JOIN film USING (film_id)
+GROUP BY film.rating
+ORDER BY film.rating DESC;
